@@ -1,35 +1,13 @@
 import React from 'react'
 import styled from 'styled-components'
-
-const ROWS = 15
-
-const cells = Array(ROWS ** 2)
-  .fill(0)
-  .map((_, i) => {
-    const x = i % 15
-    const y = (i / 15) | 0
-
-    const nMax = (ROWS - 1) / 2
-    const nx = x <= nMax ? x : nMax - (x - nMax)
-    const ny = y <= nMax ? y : nMax - (y - nMax)
-
-    const every = (...v) => [nx, ny].every((n) => v.includes(n))
-    const one = (v1, v2) =>
-      [nx, ny].some((n) => n === v1) && [nx, ny].some((n) => n === v2)
-
-    if (every(nMax)) return { type: 'origin' }
-    else if (every(nMax - 1) || one(2, nMax - 1) || one(3, nMax) || one(3, 0))
-      return { type: 'double-letter' }
-    else if (every(0, nMax)) return { type: 'triple-word' }
-    else if (every(1, nMax - 2) && !every(1)) return { type: 'triple-letter' }
-    else if (nx === ny) return { type: 'double-word' }
-    return {}
-  })
+import { useSelector } from './utils/hooks'
 
 export default function Board() {
+  const board = useSelector(({ game }) => game.board)
+
   return (
-    <S.Board>
-      {cells.map(({ type }, i) => (
+    <S.Board width={board.width} height={board.height}>
+      {board.cells.map(({ type }, i) => (
         <S.Stone key={i} data-type={type} />
       ))}
     </S.Board>
@@ -37,10 +15,10 @@ export default function Board() {
 }
 
 const S = {
-  Board: styled.div`
+  Board: styled.div<{ width: number; height: number }>`
     display: grid;
-    grid-template-columns: repeat(${ROWS}, 1fr);
-    grid-template-rows: repeat(${ROWS}, 1fr);
+    grid-template-columns: repeat(${({ width }) => width}, 1fr);
+    grid-template-rows: repeat(${15}, 1fr);
     background-color: #000;
     grid-gap: 1px;
     width: 90vmin;
@@ -49,6 +27,7 @@ const S = {
     left: 50%;
     top: 50%;
     transform: translateX(-50%) translateY(-50%);
+    font-family: 'Poppins', sans-serif;
   `,
 
   Stone: styled.div`
