@@ -1,7 +1,14 @@
 interface State {
   game: {
     board: Board
+    tiles: Tile[]
+    stage: Stage
+    selected: Tile['key'] | null
   }
+}
+
+interface Stage {
+  name: 'SELECT_TILE' | 'PLACE_TILE'
 }
 
 interface Board {
@@ -11,7 +18,9 @@ interface Board {
 }
 
 interface Cell {
+  key: string
   type: CellType
+  tile?: Tile['key']
 }
 
 type CellType =
@@ -21,3 +30,9 @@ type CellType =
   | 'triple-letter'
   | 'double-letter'
   | 'default'
+
+interface Tile {
+  key: string
+  letter: string
+  cell?: Cell['key']
+}
