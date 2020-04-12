@@ -1,7 +1,8 @@
 // prettier-ignore
 export interface Actions {
-  SELECT_TILE: { value: Tile['key'] }
-  PLACE_TILE: { value: Cell['key'] }
+  SELECT_TILE:          { value: Tile['key'] }
+  PLACE_TILE:           { value: Cell['key'] }
+  SET_ANIMATION_START:  { x: number, y: number }
 }
 
 // Action creator. The type of the payload depends on the specified action.

@@ -26,8 +26,6 @@ const cells = Array(ROWS ** 2)
     }
   )
 
-cells[20].tile = 'a2'
-
 const create = (letter: string, num: number): Tile[] =>
   Array(num)
     .fill(letter.toLowerCase())

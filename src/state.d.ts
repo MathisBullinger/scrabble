@@ -4,6 +4,7 @@ interface State {
     tiles: Tile[]
     stage: Stage
     selected: Tile['key'] | null
+    animateFrom?: { x: number; y: number }
   }
 }
 

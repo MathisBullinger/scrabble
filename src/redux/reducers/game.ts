@@ -3,7 +3,7 @@ import { assemble as a } from '../actions'
 
 export default function (
   state = defaultState.game,
-  action: a<'SELECT_TILE'> | a<'PLACE_TILE'>
+  action: a<'SELECT_TILE'> | a<'PLACE_TILE'> | a<'SET_ANIMATION_START'>
 ): State['game'] {
   switch (action.type) {
     case 'SELECT_TILE':
@@ -27,6 +27,11 @@ export default function (
               : cell
           ),
         },
+      }
+    case 'SET_ANIMATION_START':
+      return {
+        ...state,
+        animateFrom: action,
       }
     default:
       return state
