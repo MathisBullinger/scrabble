@@ -14,7 +14,7 @@ export default function Cell({ cell }: Props) {
   const tiles = useSelector(({ game }) => game.tiles)
 
   function select() {
-    if (stage !== 'PLACE_TILE') return
+    if (stage !== 'PLACE_TILE' || cell.tile) return
     dispatch(action('PLACE_TILE', cell.key))
   }
 

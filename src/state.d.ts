@@ -2,9 +2,11 @@ interface State {
   game: {
     board: Board
     tiles: Tile[]
+    pool: Tile['key'][]
     stage: Stage
-    selected: Tile['key'] | null
+    selected?: Tile['key']
     animateFrom?: { x: number; y: number }
+    players: Player[]
   }
 }
 
@@ -36,4 +38,9 @@ interface Tile {
   key: string
   letter: string
   cell?: Cell['key']
+}
+
+interface Player {
+  id: number
+  tray: Tile['key'][]
 }

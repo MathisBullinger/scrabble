@@ -17,7 +17,6 @@ export default function Tile({ tile, placed = false }: Props) {
   const ref = useRef<HTMLDivElement>()
 
   useEffect(() => {
-    console.log({ animationStart })
     if (!animationStart || !ref.current || !placed) return
     const { x, y } = ref.current.getBoundingClientRect()
     ref.current.style.opacity = '0'

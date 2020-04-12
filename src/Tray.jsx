@@ -4,7 +4,11 @@ import { useSelector } from './utils/hooks'
 import Tile from './Tile'
 
 export default function Tray() {
-  const tiles = useSelector(({ game }) => game.tiles)
+  const tilePool = useSelector(({ game }) => game.tiles)
+  const player = useSelector(({ game }) => game.players[0])
+  const tiles = player.tray.map((tile) =>
+    tilePool.find(({ key }) => key === tile)
+  )
 
   return (
     <S.Tray>

@@ -18,7 +18,7 @@ export default function (
       return {
         ...state,
         stage: { name: 'SELECT_TILE' },
-        selected: null,
+        selected: undefined,
         board: {
           ...state.board,
           cells: state.board.cells.map((cell) =>
@@ -27,6 +27,10 @@ export default function (
               : cell
           ),
         },
+        players: state.players.map((player) => ({
+          ...player,
+          tray: player.tray.filter((tile) => tile !== state.selected),
+        })),
       }
     case 'SET_ANIMATION_START':
       return {

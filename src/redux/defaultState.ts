@@ -1,3 +1,5 @@
+import tileDist from '../data/tiles/de.json'
+
 const ROWS = 15
 const cells = Array(ROWS ** 2)
   .fill(null)
@@ -31,7 +33,16 @@ const create = (letter: string, num: number): Tile[] =>
     .fill(letter.toLowerCase())
     .map((v, i) => ({ letter: v, key: v + i }))
 
-const tiles = [...create('a', 3), ...create('b', 2)]
+const createTiles = (letters: { [letter: string]: number }) =>
+  Object.entries(letters).flatMap(([letter, num]) => create(letter, num))
+
+const tiles = createTiles(tileDist)
+
+const pool = tiles.map(({ key }) => key)
+
+const tray = Array(7)
+  .fill(0)
+  .map(() => pool.splice((Math.random() * pool.length) | 0, 1)[0])
 
 const defaultState: State = {
   game: {
@@ -41,8 +52,9 @@ const defaultState: State = {
       height: ROWS,
     },
     tiles,
+    pool,
     stage: { name: 'SELECT_TILE' },
-    selected: null,
+    players: [{ id: 0, tray }],
   },
 }
 
