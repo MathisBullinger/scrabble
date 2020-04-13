@@ -8,6 +8,10 @@ interface State {
     animateFrom?: { x: number; y: number }
     players: Player[]
   }
+  rtc: {
+    requireConnection: boolean
+    connection?: import('peerjs').DataConnection
+  }
 }
 
 interface Stage {

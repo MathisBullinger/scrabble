@@ -3,6 +3,7 @@ export interface Actions {
   SELECT_TILE:          { value: Tile['key'] }
   PLACE_TILE:           { value: Cell['key'] }
   SET_ANIMATION_START:  { x: number, y: number }
+  SET_CONNECTION:       { connection: State['rtc']['connection'] }
 }
 
 // Action creator. The type of the payload depends on the specified action.

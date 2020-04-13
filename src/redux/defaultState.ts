@@ -56,6 +56,9 @@ const defaultState: State = {
     stage: { name: 'SELECT_TILE' },
     players: [{ id: 0, tray }],
   },
+  rtc: {
+    requireConnection: true,
+  },
 }
 
 export default defaultState

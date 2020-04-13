@@ -1,13 +1,25 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import Board from './Board'
 import Tray from './Tray'
+import Connect from './Connect'
+import { useSelector } from './utils/hooks'
 
 export default function App() {
+  const connected = useSelector(
+    ({ rtc }) => !rtc.requireConnection || rtc.connection
+  )
+
   return (
     <S.App>
-      <Board />
-      <Tray />
+      {!connected ? (
+        <Connect />
+      ) : (
+        <>
+          <Board />
+          <Tray />
+        </>
+      )}
     </S.App>
   )
 }
