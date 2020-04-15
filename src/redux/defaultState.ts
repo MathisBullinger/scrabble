@@ -40,10 +40,6 @@ const tiles = createTiles(tileDist)
 
 const pool = tiles.map(({ key }) => key)
 
-const tray = Array(7)
-  .fill(0)
-  .map(() => pool.splice((Math.random() * pool.length) | 0, 1)[0])
-
 const defaultState: State = {
   game: {
     board: {
@@ -54,7 +50,10 @@ const defaultState: State = {
     tiles,
     pool,
     stage: { name: 'SELECT_TILE' },
-    players: [{ id: 0, tray }],
+    // players: [{ id: 0, tray }],
+    // meId: 0,
+    players: [],
+    turn: 0,
   },
   rtc: {
     requireConnection: true,

@@ -3,7 +3,15 @@ import { assemble as a } from '../actions'
 
 export default function (
   state = defaultState.game,
-  action: a<'SELECT_TILE'> | a<'PLACE_TILE'> | a<'SET_ANIMATION_START'>
+  action:
+    | a<'SELECT_TILE'>
+    | a<'PLACE_TILE'>
+    | a<'SET_ANIMATION_START'>
+    | a<'CREATE_PLAYER'>
+    | a<'SET_ME_ID'>
+    | a<'SET_ACTIVE_PLAYER'>
+    | a<'DRAW_TILES'>
+    | a<'NEXT_TURN'>
 ): State['game'] {
   switch (action.type) {
     case 'SELECT_TILE':
@@ -36,6 +44,35 @@ export default function (
       return {
         ...state,
         animateFrom: action,
+      }
+    case 'CREATE_PLAYER':
+      return {
+        ...state,
+        players: [...state.players, { id: action.value, tray: [] }],
+      }
+    case 'SET_ME_ID':
+      return {
+        ...state,
+        meId: action.value,
+      }
+    case 'SET_ACTIVE_PLAYER':
+      return {
+        ...state,
+        activePlayer: action.value,
+      }
+    case 'DRAW_TILES':
+      return {
+        ...state,
+        players: state.players.map((player) =>
+          player.id !== state.activePlayer
+            ? player
+            : { ...player, tray: [...player.tray, ...action.value] }
+        ),
+      }
+    case 'NEXT_TURN':
+      return {
+        ...state,
+        turn: state.turn + 1,
       }
     default:
       return state

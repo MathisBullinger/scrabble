@@ -4,6 +4,11 @@ export interface Actions {
   PLACE_TILE:           { value: Cell['key'] }
   SET_ANIMATION_START:  { x: number, y: number }
   SET_CONNECTION:       { connection: State['rtc']['connection'] }
+  CREATE_PLAYER:        { value: Player['id'] }
+  SET_ME_ID:            { value: Player['id'] }
+  SET_ACTIVE_PLAYER:    { value: Player['id'] }
+  DRAW_TILES:           { value: Tile['key'][] }
+  NEXT_TURN:            undefined
 }
 
 // Action creator. The type of the payload depends on the specified action.

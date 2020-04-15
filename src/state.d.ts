@@ -7,6 +7,9 @@ interface State {
     selected?: Tile['key']
     animateFrom?: { x: number; y: number }
     players: Player[]
+    meId?: Player['id']
+    activePlayer?: Player['id']
+    turn: number
   }
   rtc: {
     requireConnection: boolean
@@ -15,7 +18,7 @@ interface State {
 }
 
 interface Stage {
-  name: 'SELECT_TILE' | 'PLACE_TILE'
+  name: 'DRAW_TILES' | 'SELECT_TILE' | 'PLACE_TILE'
 }
 
 interface Board {

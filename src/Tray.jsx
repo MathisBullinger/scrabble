@@ -4,12 +4,16 @@ import { useSelector } from './utils/hooks'
 import Tile from './Tile'
 
 export default function Tray() {
+  const meId = useSelector(({ game }) => game.meId)
   const tilePool = useSelector(({ game }) => game.tiles)
-  const player = useSelector(({ game }) => game.players[0])
-  const tiles = player.tray.map((tile) =>
+  const player = useSelector(({ game }) =>
+    meId === undefined ? undefined : game.players[meId]
+  )
+  const tiles = player?.tray.map((tile) =>
     tilePool.find(({ key }) => key === tile)
   )
 
+  if (meId === undefined) return null
   return (
     <S.Tray>
       {tiles.map((tile) => (
