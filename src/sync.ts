@@ -1,9 +1,8 @@
 import action, { Actions, assemble } from './redux/actions'
 import { store } from './redux/store'
-import { send, subscribe } from './rtc'
+import { subscribe, onConnect } from './rtc'
 import { drawTiles } from './utils/game'
 
-export const syncOutbound: (keyof Actions)[] = ['SELECT_TILE', 'PLACE_TILE']
 const syncInbound: (keyof Actions)[] = [
   'SELECT_TILE',
   'DRAW_TILES',
@@ -11,6 +10,22 @@ const syncInbound: (keyof Actions)[] = [
   'CREATE_PLAYER',
   'SET_ACTIVE_PLAYER',
 ]
+
+onConnect(() => {
+  console.log('on connect')
+  store.dispatch(action('SET_ME_ID', 0))
+  store.dispatch(action('SET_ACTIVE_PLAYER', 0))
+  store.dispatch(action('CREATE_PLAYER', 0))
+  store.dispatch(action('DRAW_TILES', drawTiles(7)))
+})
+
+const me = () =>
+  store
+    .getState()
+    .game.players.find(({ id }) => id === store.getState().game.meId)
+const isCurrentPlayer = () =>
+  me() && me()?.id === store.getState().game.activePlayer
+
 const handlers: Handlers = {
   SELECT_TILE: [
     () => {
@@ -20,27 +35,17 @@ const handlers: Handlers = {
     },
   ],
   SET_ACTIVE_PLAYER: [
-    (a) => {
-      if (a.value !== store.getState().game.meId) return
-      if (
-        !store
-          .getState()
-          .game.players.find(({ id }) => id === store.getState().game.meId)
-          ?.tray?.length
-      ) {
-        const draw = action('DRAW_TILES', drawTiles(7))
-        store.dispatch(draw)
-        send(draw)
-      }
+    () => {
+      if (!isCurrentPlayer()) return
+      if (!me()?.tray?.length)
+        store.dispatch(action('DRAW_TILES', drawTiles(7)))
     },
   ],
   CREATE_PLAYER: [
     (a) => {
-      if (store.getState().game.meId === undefined) {
-        const act = action('CREATE_PLAYER', a.value + 1)
-        store.dispatch(act)
+      if (!me()) {
         store.dispatch(action('SET_ME_ID', a.value + 1))
-        send(act)
+        store.dispatch(action('CREATE_PLAYER', a.value + 1))
       }
     },
   ],
@@ -56,14 +61,6 @@ syncInbound.forEach((type) => {
     ...(handlers[type] ?? []),
   ]
 })
-
-const on = <T extends keyof Actions>(
-  a: { type: T },
-  type: T,
-  handler: (msg: assemble<T>) => void
-) => {
-  if (a.type === type) handler(a as assemble<T>)
-}
 
 subscribe(function (msg: any) {
   console.log(msg)

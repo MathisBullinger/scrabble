@@ -13,7 +13,7 @@ export default function Tray() {
     tilePool.find(({ key }) => key === tile)
   )
 
-  if (meId === undefined) return null
+  if (!player) return null
   return (
     <S.Tray>
       {tiles.map((tile) => (

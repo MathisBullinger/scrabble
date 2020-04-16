@@ -9,8 +9,9 @@ export const store = createStore(
   combineReducers(reducers),
   compose(
     applyMiddleware(sagaMiddleware),
-    (window as any).__REDUX_DEVTOOLS_EXTENSION__ &&
-      (window as any).__REDUX_DEVTOOLS_EXTENSION__()
+    ...('__REDUX_DEVTOOLS_EXTENSION__' in window
+      ? [(window as any).__REDUX_DEVTOOLS_EXTENSION__()]
+      : [])
   )
 )
 

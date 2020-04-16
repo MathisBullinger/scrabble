@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { open, connect } from './rtc'
 
@@ -9,6 +9,12 @@ export default function Connect() {
   async function createGame() {
     setCode(await open())
   }
+
+  useEffect(() => {
+    if (localStorage.getItem('id')) createGame()
+    if (localStorage.getItem('peer'))
+      setTimeout(() => connect(localStorage.getItem('peer')), 1000)
+  }, [])
 
   return (
     <S.Connect>
