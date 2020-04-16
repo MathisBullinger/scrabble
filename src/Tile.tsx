@@ -18,13 +18,25 @@ export default function Tile({ tile, placed = false }: Props) {
 
   useEffect(() => {
     if (!animationStart || !ref.current || !placed) return
+
+    new MutationObserver((mutations, observer) => {
+      const node = (ref.current as HTMLDivElement).getBoundingClientRect()
+      const parent = ((ref.current as HTMLDivElement)?.parentNode
+        ?.parentNode as HTMLDivElement)?.getBoundingClientRect()
+      if (node.top >= parent.top && node.bottom <= parent.bottom) return
+      observer.disconnect()
+      setAnimation(true)
+    }).observe(ref.current, { attributes: true })
+
     const { x, y } = ref.current.getBoundingClientRect()
-    ref.current.style.opacity = '0'
-    ref.current.style.transition = 'none'
-    ref.current.style.transform = `translateX(${
-      animationStart.x - x
-    }px) translateY(${animationStart.y - y}px)`
-    requestAnimationFrame(() => setAnimation(true))
+
+    Object.assign(ref.current.style, {
+      opacity: '0',
+      transition: 'none',
+      transform: `translateX(${Math.round(
+        animationStart.x - x
+      )}px) translateY(${Math.round(animationStart.y - y)}px)`,
+    })
   }, [placed, animationStart])
 
   function select() {
