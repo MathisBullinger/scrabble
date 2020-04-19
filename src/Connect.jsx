@@ -13,7 +13,7 @@ export default function Connect() {
   useEffect(() => {
     if (localStorage.getItem('id')) createGame()
     if (localStorage.getItem('peer'))
-      setTimeout(() => connect(localStorage.getItem('peer')), 1000)
+      setTimeout(() => connect(localStorage.getItem('peer')), 100)
   }, [])
 
   return (

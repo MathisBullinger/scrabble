@@ -6,9 +6,8 @@ export interface Actions {
   SET_CONNECTION:       { connection: State['rtc']['connection'] }
   CREATE_PLAYER:        { value: Player['id'] }
   SET_ME_ID:            { value: Player['id'] }
-  SET_ACTIVE_PLAYER:    { value: Player['id'] }
   DRAW_TILES:           { value: Tile['key'][] }
-  NEXT_TURN:            undefined
+  SET_STAGE:            State['game']['stage']
 }
 
 // Action creator. The type of the payload depends on the specified action.

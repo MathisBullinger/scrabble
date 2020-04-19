@@ -8,8 +8,7 @@ interface State {
     animateFrom?: { x: number; y: number }
     players: Player[]
     meId?: Player['id']
-    activePlayer?: Player['id']
-    turn: number
+    valid?: boolean
   }
   rtc: {
     requireConnection: boolean
@@ -18,7 +17,9 @@ interface State {
 }
 
 interface Stage {
-  name: 'DRAW_TILES' | 'SELECT_TILE' | 'PLACE_TILE'
+  name?: 'DRAW_TILES' | 'PLACE_WORD'
+  activePlayer?: Player['id']
+  turn: number
 }
 
 interface Board {
@@ -31,6 +32,8 @@ interface Cell {
   key: string
   type: CellType
   tile?: Tile['key']
+  column: number
+  row: number
 }
 
 type CellType =
@@ -50,4 +53,5 @@ interface Tile {
 interface Player {
   id: number
   tray: Tile['key'][]
+  name?: string
 }

@@ -16,7 +16,11 @@ const cells = Array(ROWS ** 2)
       const one = (v1: number, v2: number) =>
         [nx, ny].some((n) => n === v1) && [nx, ny].some((n) => n === v2)
 
-      const cell = { key: `${String.fromCharCode(65 + y)}${x + 1}` }
+      const cell = {
+        key: `${String.fromCharCode(65 + y)}${x + 1}`,
+        column: x,
+        row: y,
+      }
       if (every(nMax)) return { ...cell, type: 'origin' }
       else if (every(nMax - 1) || one(2, nMax - 1) || one(3, nMax) || one(3, 0))
         return { ...cell, type: 'double-letter' }
@@ -49,11 +53,12 @@ const defaultState: State = {
     },
     tiles,
     pool,
-    stage: { name: 'SELECT_TILE' },
+    stage: {
+      turn: 0,
+    },
     // players: [{ id: 0, tray }],
     // meId: 0,
     players: [],
-    turn: 0,
   },
   rtc: {
     requireConnection: true,

@@ -5,10 +5,9 @@ import Cell from './Cell'
 
 export default function Board() {
   const board = useSelector(({ game }) => game.board)
-  const stage = useSelector(({ game }) => game.stage.name)
 
   return (
-    <S.Board width={board.width} height={board.height} data-stage={stage}>
+    <S.Board width={board.width} height={board.height}>
       {board.cells.map((cell) => (
         <Cell key={cell.key} cell={cell} />
       ))}

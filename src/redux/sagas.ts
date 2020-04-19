@@ -5,7 +5,7 @@ const syncOutbound: (keyof import('./actions').Actions)[] = [
   'PLACE_TILE',
   'DRAW_TILES',
   'CREATE_PLAYER',
-  'SET_ACTIVE_PLAYER',
+  'SET_STAGE',
 ]
 
 let _send: typeof import('../rtc').send
@@ -15,8 +15,18 @@ export const setSend = (handler: typeof _send) => {
 
 function* syncOut(action: any) {
   const data = yield select()
-  const { activePlayer, meId } = data.game
-  if (meId !== undefined && activePlayer === meId) {
+  const {
+    stage: { activePlayer },
+    meId,
+  } = data.game
+  if (
+    meId !== undefined &&
+    (action.type === 'CREATE_PLAYER'
+      ? action.value === meId
+      : action.type === 'SET_STAGE'
+      ? action.activePlayer !== meId
+      : activePlayer === meId)
+  ) {
     console.log('send', action.type)
     if (_send) yield _send(action)
   }

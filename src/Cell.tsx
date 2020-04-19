@@ -9,17 +9,34 @@ interface Props {
 }
 
 export default function Cell({ cell }: Props) {
-  const stage = useSelector(({ game }) => game.stage.name)
+  const {
+    tiles,
+    selected,
+    stage: { turn },
+    board,
+  } = useSelector(({ game }) => game)
+  const tray = useSelector(
+    ({ game }) =>
+      game.players.find(({ id }) => id === game.stage.activePlayer)?.tray ?? []
+  )
   const dispatch = useDispatch()
-  const tiles = useSelector(({ game }) => game.tiles)
+
+  const allowed =
+    selected &&
+    !cell.tile &&
+    (turn > 0 ||
+      ((cell.row === (board.height - 1) / 2 ||
+        cell.column === (board.width - 1) / 2) &&
+        Math.abs(cell.column - (board.height - 1) / 2) < tray.length &&
+        Math.abs(cell.row - (board.width - 1) / 2) < tray.length))
 
   function select() {
-    if (stage !== 'PLACE_TILE' || cell.tile) return
+    if (!allowed) return
     dispatch(action('PLACE_TILE', cell.key))
   }
 
   return (
-    <S.Cell data-type={cell.type} onClick={select}>
+    <S.Cell data-type={cell.type} onClick={select} data-allowed={allowed}>
       {!!cell.tile && (
         <Tile
           tile={tiles.find(({ key }) => key === cell.tile) as Tile}
@@ -39,7 +56,7 @@ const S = {
       text-align: center;
       text-transform: uppercase;
       color: #000b;
-      font-size: 11px;
+      font-size: 1.2vmin;
       position: absolute;
       display: block;
       width: 100%;
@@ -75,7 +92,7 @@ const S = {
       }
     }
 
-    [data-stage='PLACE_TILE'] > &:hover {
+    &[data-allowed='true']:hover {
       cursor: pointer;
 
       &::before {

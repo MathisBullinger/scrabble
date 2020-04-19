@@ -9,7 +9,7 @@ interface Props {
 }
 
 export default function Tile({ tile, placed = false }: Props) {
-  const stage = useSelector(({ game }) => game.stage.name)
+  const { stage, meId } = useSelector(({ game }) => game)
   const selected = useSelector(({ game }) => game.selected === tile.key)
   const animationStart = useSelector(({ game }) => game.animateFrom)
   const dispatch = useDispatch()
@@ -40,7 +40,7 @@ export default function Tile({ tile, placed = false }: Props) {
   }, [placed, animationStart])
 
   function select() {
-    if (!ref.current || placed || stage !== 'SELECT_TILE') return
+    if (!ref.current || placed || stage.activePlayer !== meId) return
     const { x, y } = ref.current.getBoundingClientRect()
     dispatch(action('SET_ANIMATION_START', { x, y }))
     dispatch(action('SELECT_TILE', tile.key))
